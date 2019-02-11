@@ -1,0 +1,28 @@
+.App {
+  padding-top: 54px;
+}
+
+.entire-signup {
+  max-width: 600px;
+}
+
+.entire-login {
+  max-width: 600px;
+}
+
+.selling-point,
+.point1 {
+  text-align: center;
+  color: white;
+}
+
+.point1 {
+  padding: 1em;
+}
+
+.selling-section {
+  background-color: black;
+  opacity: 0.7;
+  display: block;
+  padding-bottom: 60px;
+}

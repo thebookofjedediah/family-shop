@@ -77,10 +77,9 @@ describe("routes : items", () => {
     });
     describe("POST /item/:id/destroy", () => {
       it("should delete a item and respond with JSON", done => {
-        Item.findAll().then(item => {
-          const itemCountBeforeDelete = item.length;
+        Item.findAll().then(items => {
+          const itemCountBeforeDelete = items.length;
           expect(itemCountBeforeDelete).toBe(1);
-
           request.post(
             `${base}item/${this.item.id}/destroy`,
             (err, res, body) => {

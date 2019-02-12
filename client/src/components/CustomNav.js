@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class CustomNav extends Component {
   render() {
@@ -6,21 +7,19 @@ class CustomNav extends Component {
       <section>
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
           <div className="container">
-            <a className="navbar-brand" href="#">
+            <Link className="navbar-brand" to="/">
               FamilyShop
-            </a>
+            </Link>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/signin">
                   Sign In
-                  <span className="sr-only">(current)</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="signup">
                   Sign Up
-                  <span className="sr-only">(current)</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">

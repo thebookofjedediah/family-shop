@@ -75,24 +75,7 @@ describe("routes : items", () => {
         });
       });
     });
-    describe("POST /item/:id/destroy", () => {
-      it("should delete a item and respond with JSON", done => {
-        Item.findAll().then(items => {
-          const itemCountBeforeDelete = items.length;
-          expect(itemCountBeforeDelete).toBe(1);
-          request.post(
-            `${base}item/${this.item.id}/destroy`,
-            (err, res, body) => {
-              Item.findAll().then(items => {
-                expect(err).toBeNull;
-                expect(items.length).toBe(itemCountBeforeDelete - 1);
-                done();
-              });
-            }
-          );
-        });
-      });
-    });
+
     describe("GET /item/:id/edit", () => {
       it("should render JSON with an edit flair ID", done => {
         request.get(`${base}item/${this.item.id}/edit`, (err, res, body) => {
@@ -109,15 +92,15 @@ describe("routes : items", () => {
           method: "POST",
           url: `${base}item/${this.item.id}/update`,
           headers: { "Content-Type": "application/json" },
-          body: { content: "Ice cream" },
+          body: { title: "Oranges" },
           json: true
         };
 
         request.post(options, (err, res, body) => {
           expect(err).toBeNull();
-          Item.findOne({ where: { content: "Ice cream" } })
+          Item.findOne({ where: { title: "Oranges" } })
             .then(item => {
-              expect(item.content).toBe("Ice cream");
+              expect(item.title).toBe("Oranges");
               done();
             })
             .catch(err => {
@@ -149,6 +132,24 @@ describe("routes : items", () => {
               console.log(err);
               done();
             });
+        });
+      });
+    });
+    describe("POST /item/:id/destroy", () => {
+      it("should delete a item and respond with JSON", done => {
+        Item.findAll().then(items => {
+          const itemCountBeforeDelete = items.length;
+          expect(itemCountBeforeDelete).toBe(1);
+          request.post(
+            `${base}item/${this.item.id}/destroy`,
+            (err, res, body) => {
+              Item.findAll().then(items => {
+                expect(err).toBeNull;
+                expect(items.length).toBe(itemCountBeforeDelete - 1);
+                done();
+              });
+            }
+          );
         });
       });
     });

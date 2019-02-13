@@ -13,7 +13,8 @@ module.exports = {
         allowNull: false
       },
       isBought: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

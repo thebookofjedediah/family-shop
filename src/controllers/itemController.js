@@ -24,11 +24,38 @@ module.exports = {
     });
   },
   destroy(req, res, next) {
-    itemQueries.deleteItem(req, (err, item) => {
+    itemQueries.deleteItem(req.params.id, (err, item) => {
       if (err) {
         res.json({ success: false });
       } else {
         res.json({ success: true });
+      }
+    });
+  },
+  edit(req, res, next) {
+    itemQueries.getItem(req.params.id, (err, item) => {
+      if (err || item == null) {
+        res.json({ success: false });
+      } else {
+        res.json(item);
+      }
+    });
+  },
+  update(req, res, next) {
+    itemQueries.updateItem(req.params.id, req.body, (err, item) => {
+      if (err || item == null) {
+        res.json({ success: false });
+      } else {
+        res.json(item);
+      }
+    });
+  },
+  setPurchase(req, res, next) {
+    itemQueries.updateItem(req.params.id, req.body, (err, item) => {
+      if (err || item == null) {
+        res.json({ success: false });
+      } else {
+        res.json(item);
       }
     });
   }

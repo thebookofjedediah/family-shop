@@ -26,3 +26,9 @@
   display: block;
   padding-bottom: 60px;
 }
+
+.input-group {
+  max-width: 500px;
+  padding-top: 90px;
+  left: 30%;
+}

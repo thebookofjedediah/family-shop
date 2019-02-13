@@ -58,12 +58,12 @@ describe("routes : items", () => {
           method: "POST",
           url: `${base}item/create`,
           headers: { "Content-Type": "application/json" },
-          body: { title: "" },
+          body: { title: "v" },
           json: true
         };
 
         request.post(options, (err, res, body) => {
-          Item.findOne({ where: { title: "" } })
+          Item.findOne({ where: { title: "v" } })
             .then(item => {
               expect(item).toBeNull();
               done();
@@ -90,6 +90,65 @@ describe("routes : items", () => {
               });
             }
           );
+        });
+      });
+    });
+    describe("GET /item/:id/edit", () => {
+      it("should render JSON with an edit flair ID", done => {
+        request.get(`${base}item/${this.item.id}/edit`, (err, res, body) => {
+          expect(err).toBeNull();
+          expect(body);
+          done();
+        });
+      });
+    });
+
+    describe("POST /item/:id/update", () => {
+      it("should update the item with the given value", done => {
+        const options = {
+          method: "POST",
+          url: `${base}item/${this.item.id}/update`,
+          headers: { "Content-Type": "application/json" },
+          body: { content: "Ice cream" },
+          json: true
+        };
+
+        request.post(options, (err, res, body) => {
+          expect(err).toBeNull();
+          Item.findOne({ where: { content: "Ice cream" } })
+            .then(item => {
+              expect(item.content).toBe("Ice cream");
+              done();
+            })
+            .catch(err => {
+              console.log(err);
+              done();
+            });
+        });
+      });
+    });
+
+    describe("POST /item/:id/buy", () => {
+      it("should update isBought status of item", done => {
+        const options = {
+          method: "POST",
+          url: `${base}item/${this.item.id}/buy`,
+          headers: { "Content-Type": "application/json" },
+          body: { isBought: true },
+          json: true
+        };
+
+        request.post(options, (err, res, body) => {
+          expect(err).toBeNull();
+          Item.findOne({ where: { id: this.item.id } })
+            .then(item => {
+              expect(item.isBought).toBe(true);
+              done();
+            })
+            .catch(err => {
+              console.log(err);
+              done();
+            });
         });
       });
     });

@@ -17,9 +17,25 @@ class List extends Component {
   }
 
   render() {
+    console.log(this.state.items);
     return (
       <section className="entire-list-page">
-        <p>Items render here</p>
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Add item here"
+            aria-label="New Item"
+            aria-describedby="basic-addon2"
+          />
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary" type="button">
+              Add Item
+            </button>
+          </div>
+        </div>
+
+        <p>{this.items}</p>
       </section>
     );
   }

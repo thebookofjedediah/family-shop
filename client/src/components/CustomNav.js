@@ -48,9 +48,9 @@ class CustomNav extends Component {
               )}
               {user && (
                 <li className="nav-item">
-                  <Link className="nav-link" onClick={this.handleSignOut}>
+                  <a className="nav-link" onClick={this.handleSignOut}>
                     Sign Out
-                  </Link>
+                  </a>
                 </li>
               )}
             </ul>
@@ -62,9 +62,9 @@ class CustomNav extends Component {
           <ul className="navbar-nav ml-auto">
             {user && (
               <li className="nav-item">
-                <Link className="nav-link" onClick={this.handleSignOut}>
+                <a className="nav-link" onClick={this.handleSignOut}>
                   Sign Out
-                </Link>
+                </a>
               </li>
             )}
           </ul>

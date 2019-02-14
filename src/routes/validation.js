@@ -2,7 +2,7 @@ module.exports = {
   validateItems(req, res, next) {
     if (req.method === "POST") {
       req
-        .checkBody("content", "must be at least 2 characters in length")
+        .checkBody("title", "must be at least 2 characters in length")
         .isLength({ min: 2 });
     }
 

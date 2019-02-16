@@ -53,7 +53,7 @@ class SignIn extends Component {
               value={this.state.content}
               onChange={this.handleChange}
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
           </div>
@@ -61,14 +61,14 @@ class SignIn extends Component {
             <label for="exampleInputPassword1">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="password"
               placeholder="Password"
               value={this.state.content}
               onChange={this.handleChange}
             />
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" className="btn btn-primary">
             Submit
           </button>
         </form>

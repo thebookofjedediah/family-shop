@@ -30,5 +30,11 @@
 .input-group {
   max-width: 500px;
   padding-top: 90px;
-  left: 30%;
+}
+
+.list-group,
+.list-group-item {
+  max-width: 800px;
+  text-align: center;
+  display: inline-block;
 }

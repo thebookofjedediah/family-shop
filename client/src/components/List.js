@@ -14,7 +14,7 @@ class List extends Component {
   componentWillMount(items) {
     axios
       .get("/items", items)
-      .then(res => this.setState({ items: res.data.items }))
+      .then(res => this.setState({ items: res.data }))
       .catch(err => {
         console.log(err);
       });
@@ -27,6 +27,16 @@ class List extends Component {
       .then(res => {})
       .catch(err => {
         console.log("At error item create", err);
+      });
+  }
+
+  deleteItem(item) {
+    console.log("made it to delete item");
+    axios
+      .post(`/item/${item.id}/destroy`)
+      .then(res => {})
+      .catch(err => {
+        console.log("error at deleteItem", err);
       });
   }
 
@@ -44,28 +54,56 @@ class List extends Component {
   };
 
   render() {
-    console.log(this.state.items);
+    const { items } = this.state;
     return (
-      <section className="entire-list-page">
-        <form className="login-form" onSubmit={this.handleSubmit}>
+      <section className="entire-list-page ">
+        <form
+          className="login-form row justify-content-center"
+          onSubmit={this.handleSubmit}
+        >
           <div className="input-group mb-3">
             <input
               type="text"
               className="form-control"
               id="title"
+              onChange={this.handleChange}
               value={this.state.content}
               placeholder="Add item here"
               aria-label="New Item"
               aria-describedby="basic-addon2"
             />
             <div className="input-group-append">
-              <button className="btn btn-outline-secondary" type="button">
-                Add Item
-              </button>
+              <input
+                className="btn btn-outline-secondary"
+                type="submit"
+                value="Add Item"
+              />
             </div>
           </div>
         </form>
-
+        <div className="row justify-content-center">
+          <ul className="list-group">
+            {items.map((item, id) => {
+              return (
+                <div>
+                  <li
+                    className="list-group-item list-group-item-action"
+                    key={id}
+                  >
+                    {item.title}
+                  </li>
+                  <button className="btn btn-outline-primary">Edit</button>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={this.deleteItem}
+                  >
+                    Delete
+                  </button>
+                </div>
+              );
+            })}
+          </ul>
+        </div>
         <p>{this.items}</p>
       </section>
     );

@@ -30,10 +30,10 @@ class List extends Component {
       });
   }
 
-  deleteItem(item) {
-    console.log("made it to delete item");
+  deleteItem(id) {
+    console.log("made it to delete item", id);
     axios
-      .post(`/item/${item.id}/destroy`)
+      .post(`/item/${id}/destroy`)
       .then(res => {})
       .catch(err => {
         console.log("error at deleteItem", err);
@@ -95,7 +95,9 @@ class List extends Component {
                   <button className="btn btn-outline-primary">Edit</button>
                   <button
                     className="btn btn-outline-danger"
-                    onClick={this.deleteItem}
+                    onClick={() => {
+                      this.deleteItem(id);
+                    }}
                   >
                     Delete
                   </button>

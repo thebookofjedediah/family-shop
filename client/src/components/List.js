@@ -46,12 +46,13 @@ class List extends Component {
         console.log("error at deleteItem", err);
       });
   }
-  editItem(id) {
+  editItem(id, title) {
     console.log("made it to edit item");
     axios
       .get(`/item/${id}/edit`, id)
       .then(res => {
         this.setState({ isEditing: true });
+        console.log(title);
       })
       .catch(err => {
         console.log("error at editItem", err);

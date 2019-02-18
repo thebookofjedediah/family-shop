@@ -46,6 +46,9 @@ class List extends Component {
       });
   }
 
+  //edit will use a map
+  //Map(res.data => {if id == res.data.id }) then return res.data
+
   handleSubmit = e => {
     const { title } = this.state;
     e.preventDefault();

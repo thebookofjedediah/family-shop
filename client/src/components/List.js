@@ -21,20 +21,26 @@ class List extends Component {
   }
 
   addItem(item) {
-    console.log("Made it to item creation", item);
     axios
       .post("/item/create", item)
-      .then(res => {})
+      .then(res => {
+        this.setState({ items: [...this.state.items, res.data] });
+      })
       .catch(err => {
         console.log("At error item create", err);
       });
   }
 
   deleteItem(id) {
-    console.log("made it to delete item", id);
     axios
       .post(`/item/${id}/destroy`)
-      .then(res => {})
+      .then(res => {
+        this.setState({
+          items: this.state.items.filter(item => {
+            return item.id !== id;
+          })
+        });
+      })
       .catch(err => {
         console.log("error at deleteItem", err);
       });
@@ -83,27 +89,28 @@ class List extends Component {
         </form>
         <div className="row justify-content-center">
           <ul className="list-group">
-            {items.map((item, id) => {
-              return (
-                <div>
-                  <li
-                    className="list-group-item list-group-item-action"
-                    key={id}
-                  >
-                    {item.title}
-                  </li>
-                  <button className="btn btn-outline-primary">Edit</button>
-                  <button
-                    className="btn btn-outline-danger"
-                    onClick={() => {
-                      this.deleteItem(id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              );
-            })}
+            {items.length > 0
+              ? items.map((item, id) => {
+                  return (
+                    <div>
+                      <li
+                        className="list-group-item list-group-item-action"
+                        key={id}
+                      >
+                        {item.title}
+                        {item.id}
+                      </li>
+                      <button className="btn btn-outline-primary">Edit</button>
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={() => this.deleteItem(item.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  );
+                })
+              : ""}
           </ul>
         </div>
         <p>{this.items}</p>

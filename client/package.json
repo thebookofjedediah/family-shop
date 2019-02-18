@@ -18,10 +18,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5000",
+  "homepage": "https://family-shop.herokuapp.com/",
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost:5000",
   "browserslist": [
     ">0.2%",
     "not dead",

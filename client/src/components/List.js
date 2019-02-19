@@ -8,7 +8,8 @@ class List extends Component {
       email: localStorage.getItem("user"),
       items: [],
       title: "",
-      isEditing: false
+      isEditing: false,
+      isBought: false
     };
   }
 
@@ -25,7 +26,7 @@ class List extends Component {
     axios
       .post("/item/create", item)
       .then(res => {
-        this.setState({ items: [...this.state.items, res.data] });
+        this.setState({ items: [...this.state.items, res.data], title: "" });
       })
       .catch(err => {
         console.log("At error item create", err);
@@ -46,24 +47,68 @@ class List extends Component {
         console.log("error at deleteItem", err);
       });
   }
+
   editItem(id, title) {
     console.log("made it to edit item");
     axios
-      .get(`/item/${id}/edit`, id)
+      .get(`/item/${id}/edit`)
       .then(res => {
-        this.setState({ isEditing: true });
-        console.log(title);
+        this.setState({
+          isEditing: true,
+          title: res.data.title,
+          itemId: res.data.id
+        });
+        console.log("edit item response", res.data);
       })
       .catch(err => {
         console.log("error at editItem", err);
       });
   }
 
+  updateItem() {
+    const { items, itemId, title } = this.state;
+    const objIndex = items.findIndex(x => x.id === itemId);
+    axios
+      .post(`/item/${itemId}/update`, { title })
+      .then(res => {
+        this.setState({
+          items: items.map((item, index) =>
+            index === objIndex ? { title } : item
+          ),
+          isEditing: false,
+          title: ""
+        });
+      })
+      .catch(err => {
+        console.log("updateItem error", err);
+      });
+  }
+  buyItem(id, isBought) {
+    console.log("Made it to buyItem", id);
+    axios
+      .post(`/item/${id}/buy`, { id, isBought: !isBought })
+      .then(res => {
+        this.setState(prevState => ({
+          isBought: !prevState.isBought
+        }));
+        console.log(this.state.isBought);
+      })
+      .catch(err => {
+        console.log("error at buying an item", err);
+      });
+  }
+
   handleSubmit = e => {
-    const { title } = this.state;
     e.preventDefault();
-    const item = { title };
-    this.addItem(item);
+    if (this.state.isEditing === true) {
+      this.updateItem(e);
+      console.log();
+      e.preventDefault();
+    } else {
+      const { title } = this.state;
+      const item = { title };
+      this.addItem(item);
+    }
   };
 
   handleChange = e => {
@@ -73,91 +118,74 @@ class List extends Component {
   };
 
   render() {
-    const { items, isEditing } = this.state;
-    if (isEditing === true) {
-      return (
-        <section className="entire-list-page ">
-          <form className="login-form row justify-content-center">
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                value={this.state.title}
-                aria-describedby="basic-addon2"
-              />
-              <div className="input-group-append">
-                <button className="btn btn-outline-secondary" type="submit">
-                  Update Item
-                </button>
-              </div>
-            </div>
-          </form>
-        </section>
-      );
-    } else {
-      return (
-        <section className="entire-list-page ">
-          <form
-            className="login-form row justify-content-center"
-            onSubmit={this.handleSubmit}
-          >
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                onChange={this.handleChange}
-                value={this.state.content}
-                placeholder="Add item here"
-                aria-label="New Item"
-                aria-describedby="basic-addon2"
-              />
-              <div className="input-group-append">
+    const { items, isEditing, isBought } = this.state;
+    return (
+      <section className="entire-list-page ">
+        <form
+          className="login-form row justify-content-center"
+          onSubmit={this.handleSubmit}
+        >
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="title"
+              onChange={this.handleChange}
+              value={this.state.title}
+              placeholder="Add item here"
+              aria-label="New Item"
+              aria-describedby="basic-addon2"
+            />
+            <div className="input-group-append">
+              {!isEditing ? (
                 <input
                   className="btn btn-outline-secondary"
                   type="submit"
                   value="Add Item"
                 />
-              </div>
+              ) : (
+                <input
+                  className="btn btn-outline-secondary"
+                  type="submit"
+                  value="Update Item"
+                />
+              )}
             </div>
-          </form>
-
-          <div className="row justify-content-center">
-            <ul className="list-group">
-              {items.length > 0
-                ? items.map((item, id) => {
-                    return (
-                      <div>
-                        <li
-                          className="list-group-item list-group-item-action"
-                          key={id}
-                        >
-                          {item.title}
-                        </li>
-                        <button
-                          className="btn btn-outline-primary"
-                          onClick={() => this.editItem(item.id, item.title)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-outline-danger"
-                          onClick={() => this.deleteItem(item.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    );
-                  })
-                : ""}
-            </ul>
           </div>
-          <p>{this.items}</p>
-        </section>
-      );
-    }
+        </form>
+        <div className="row justify-content-center">
+          <ul className="list-group">
+            {items.length > 0
+              ? items.map((item, id) => {
+                  return (
+                    <div key={item.id}>
+                      <li
+                        className="list-group-item list-group-item-action"
+                        onClick={() => this.buyItem(item.id, item.isBought)}
+                      >
+                        {item.title} {item.isBought ? "(bought)" : ""}
+                      </li>
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={() => this.editItem(item.id, item.title)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={() => this.deleteItem(item.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  );
+                })
+              : ""}
+          </ul>
+        </div>
+        <p>{this.items}</p>
+      </section>
+    );
   }
 }
-
 export default List;

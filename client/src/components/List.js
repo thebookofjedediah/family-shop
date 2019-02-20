@@ -8,8 +8,7 @@ class List extends Component {
       email: localStorage.getItem("user"),
       items: [],
       title: "",
-      isEditing: false,
-      isBought: false
+      isEditing: false
     };
   }
 
@@ -73,7 +72,7 @@ class List extends Component {
       .then(res => {
         this.setState({
           items: items.map((item, index) =>
-            index === objIndex ? { title } : item
+            index === objIndex ? { ...item, title } : item
           ),
           isEditing: false,
           title: ""
@@ -83,15 +82,18 @@ class List extends Component {
         console.log("updateItem error", err);
       });
   }
-  buyItem(id, isBought) {
-    console.log("Made it to buyItem", id);
+  buyItem(item) {
+    const { items } = this.state;
+    const objIndex = items.findIndex(x => x.id === item.id);
     axios
-      .post(`/item/${id}/buy`, { id, isBought: !isBought })
+      .post(`/item/${item.id}/buy`, { isBought: !item.isBought })
       .then(res => {
-        this.setState(prevState => ({
-          isBought: !prevState.isBought
-        }));
-        console.log(this.state.isBought);
+        const { isBought } = res.data;
+        this.setState({
+          items: items.map((item, index) =>
+            index === objIndex ? { ...item, isBought } : item
+          )
+        });
       })
       .catch(err => {
         console.log("error at buying an item", err);
@@ -118,7 +120,7 @@ class List extends Component {
   };
 
   render() {
-    const { items, isEditing, isBought } = this.state;
+    const { items, isEditing } = this.state;
     return (
       <section className="entire-list-page ">
         <form
@@ -161,7 +163,7 @@ class List extends Component {
                     <div key={item.id}>
                       <li
                         className="list-group-item list-group-item-action"
-                        onClick={() => this.buyItem(item.id, item.isBought)}
+                        onClick={() => this.buyItem(item)}
                       >
                         {item.title} {item.isBought ? "(bought)" : ""}
                       </li>

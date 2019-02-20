@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
+import io from "socket.io-client";
+
+let socket;
+
+socket = io.connect("http://localhost:5000");
 
 class List extends Component {
   constructor(props) {

@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import io from "socket.io-client";
-
-let socket;
-
-socket = io.connect("http://localhost:5000");
 
 class List extends Component {
   constructor(props) {
@@ -127,7 +122,7 @@ class List extends Component {
   render() {
     const { items, isEditing } = this.state;
     return (
-      <section className="entire-list-page ">
+      <section className="entire-list-page">
         <form
           className="login-form row justify-content-center"
           onSubmit={this.handleSubmit}
